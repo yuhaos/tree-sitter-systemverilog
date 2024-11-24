@@ -2803,11 +2803,15 @@ const rules = {
 
 
 // ** A.6.6 Conditional statements
-  conditional_statement: $ => prec.right(seq(
+
+  else_clause: $ => prec(1, seq('else', $.statement_or_null)),
+  elseif_clause: $ => prec(2, seq('else', 'if', '(', $.cond_predicate, ')', $.statement_or_null)),
+
+  conditional_statement: $ => prec(1, seq(
     optional($.unique_priority),
     'if', '(', $.cond_predicate, ')', $.statement_or_null,
-    repseq('else', 'if', '(', $.cond_predicate, ')', $.statement_or_null),
-    optseq('else', $.statement_or_null)
+    repseq($.elseif_clause),
+    optseq($.else_clause)
   )),
 
   unique_priority: $ => choice('unique', 'unique0', 'priority'),
@@ -4676,7 +4680,7 @@ const rules = {
 // * Tree-sitter
 // ** Module exports
 module.exports = grammar({
-  name: 'verilog',
+  name: 'systemverilog',
   word: $ => $.simple_identifier,
   rules: rules,
   extras: $ => [/\s/, $.comment],

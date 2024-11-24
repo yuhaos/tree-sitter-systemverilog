@@ -1,5 +1,6 @@
 {
-  "name": "verilog",
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "systemverilog",
   "word": "simple_identifier",
   "rules": {
     "source_file": {
@@ -20257,9 +20258,59 @@
         }
       ]
     },
+    "else_clause": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "else"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "statement_or_null"
+          }
+        ]
+      }
+    },
+    "elseif_clause": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "else"
+          },
+          {
+            "type": "STRING",
+            "value": "if"
+          },
+          {
+            "type": "STRING",
+            "value": "("
+          },
+          {
+            "type": "SYMBOL",
+            "name": "cond_predicate"
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "statement_or_null"
+          }
+        ]
+      }
+    },
     "conditional_statement": {
-      "type": "PREC_RIGHT",
-      "value": 0,
+      "type": "PREC",
+      "value": 1,
       "content": {
         "type": "SEQ",
         "members": [
@@ -20301,28 +20352,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "else"
-                },
-                {
-                  "type": "STRING",
-                  "value": "if"
-                },
-                {
-                  "type": "STRING",
-                  "value": "("
-                },
-                {
                   "type": "SYMBOL",
-                  "name": "cond_predicate"
-                },
-                {
-                  "type": "STRING",
-                  "value": ")"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "statement_or_null"
+                  "name": "elseif_clause"
                 }
               ]
             }
@@ -20334,12 +20365,8 @@
                 "type": "SEQ",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": "else"
-                  },
-                  {
                     "type": "SYMBOL",
-                    "name": "statement_or_null"
+                    "name": "else_clause"
                   }
                 ]
               },
